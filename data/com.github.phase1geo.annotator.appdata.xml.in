@@ -56,6 +56,19 @@
     <value key="x-appcenter-stripe">pk_live_51Ccoj4BJm4hDdHaF1YKGdyGLCLtShzElKsr4GM9hJDJAoZArcWrNHsjL9b8SBs01GQBYpakj0l1tYenVJOqke93300TULHWdph</value>
   </custom>
   <releases>
+    <release version="2.0.2" date="2026-02-15">
+      <description>
+        <p>New</p>
+        <ul>
+          <li>Added ability to zoom in and out using Control-Scrollwheel (thanks to Loric Brevet)</li>
+          <li>Added ability to pan canvas with middle click and drag (thanks to Loric Brevet)</li>
+        </ul>
+        <p>Bug Fixes</p>
+        <ul>
+          <li>Fixed drawing issues with RTL languages and the text tool</li>
+        </ul>
+      </description>
+    </release>
     <release version="2.0.1" date="2026-01-31">
       <description>
         <p>New</p>

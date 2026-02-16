@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.phase1geo.annotator\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 22:04-0600\n"
+"POT-Creation-Date: 2026-02-15 21:45-0600\n"
 "PO-Revision-Date: 2024-07-22 17:30+0100\n"
 "Last-Translator: Albano Battistella <albano_battistella@gmail.com>\n"
 "Language-Team: Italian <LL@li.org>\n"
@@ -115,25 +115,25 @@ msgstr "Punti:"
 msgid "Text"
 msgstr "Testo"
 
-#: src/canvas_items/CanvasItemText.vala:954 src/CanvasItems.vala:1096
+#: src/canvas_items/CanvasItemText.vala:976 src/CanvasItems.vala:1096
 #: src/FormatBar.vala:60
 msgid "Copy"
 msgstr "Copia"
 
-#: src/canvas_items/CanvasItemText.vala:957 src/CanvasItems.vala:1097
+#: src/canvas_items/CanvasItemText.vala:979 src/CanvasItems.vala:1097
 #: src/FormatBar.vala:66
 msgid "Cut"
 msgstr "Taglia"
 
-#: src/canvas_items/CanvasItemText.vala:961
+#: src/canvas_items/CanvasItemText.vala:983
 msgid "Paste"
 msgstr "Incolla"
 
-#: src/canvas_items/CanvasItemText.vala:967
+#: src/canvas_items/CanvasItemText.vala:989
 msgid "Select All"
 msgstr "Seleziona tutto"
 
-#: src/canvas_items/CanvasItemText.vala:973
+#: src/canvas_items/CanvasItemText.vala:995
 msgid "Insert Emoji"
 msgstr "Inserisci Emoji"
 
@@ -170,12 +170,12 @@ msgid "Think Bubble"
 msgstr "Nuvoletta di pensiero"
 
 #: src/CanvasItems.vala:132
-#: data/com.github.phase1geo.annotator.shortcuts.ui:199
+#: data/com.github.phase1geo.annotator.shortcuts.ui:213
 msgid "Line"
 msgstr "Linea"
 
 #: src/CanvasItems.vala:133
-#: data/com.github.phase1geo.annotator.shortcuts.ui:136
+#: data/com.github.phase1geo.annotator.shortcuts.ui:150
 msgid "Arrow"
 msgstr "Freccia"
 
@@ -184,7 +184,7 @@ msgid "Blur"
 msgstr "Sfocatura"
 
 #: src/CanvasItems.vala:136
-#: data/com.github.phase1geo.annotator.shortcuts.ui:226
+#: data/com.github.phase1geo.annotator.shortcuts.ui:240
 msgid "Magnifier"
 msgstr "Lente ingrandimento"
 
@@ -254,7 +254,7 @@ msgid "Custom Arrows"
 msgstr "Frecce personalizzate"
 
 #: src/CanvasToolbar.vala:57
-#: data/com.github.phase1geo.annotator.shortcuts.ui:132
+#: data/com.github.phase1geo.annotator.shortcuts.ui:146
 msgid "Add Shape"
 msgstr "Aggiungi Forma"
 
@@ -314,11 +314,11 @@ msgstr "Proprietà Carattere"
 msgid "Drag PNG Image"
 msgstr ""
 
-#: src/Canvas.vala:191
+#: src/Canvas.vala:209
 msgid "Annotate new image?"
 msgstr "Annotare nuova immagine?"
 
-#: src/Canvas.vala:192
+#: src/Canvas.vala:210
 msgid "Pasting a new image to annotate will destroy the current annotation."
 msgstr ""
 "Incollando una nuova immagine da annotare distruggerà l'annotazione corrente."
@@ -882,7 +882,7 @@ msgstr "Musica"
 msgid "Share"
 msgstr "Condividi"
 
-#: src/StickerSet.vala:92 data/com.github.phase1geo.annotator.shortcuts.ui:317
+#: src/StickerSet.vala:92 data/com.github.phase1geo.annotator.shortcuts.ui:331
 msgid "Cursor"
 msgstr "Cursore"
 
@@ -2038,224 +2038,242 @@ msgstr "Zoom alle dimensioni reali"
 msgid "Zoom To Window"
 msgstr "Zoom su finestra"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:98
+#: data/com.github.phase1geo.annotator.shortcuts.ui:96
+#, fuzzy
+msgid "Mouse Zoom In/Out"
+msgstr "Rimpicciolisci"
+
+#: data/com.github.phase1geo.annotator.shortcuts.ui:97
+#, fuzzy
+msgid "[Control + Scroll]"
+msgstr "[Ctrl + trascina]"
+
+#: data/com.github.phase1geo.annotator.shortcuts.ui:105
 msgid "Miscellaneous"
 msgstr "Eterogeneo"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:102
+#: data/com.github.phase1geo.annotator.shortcuts.ui:109
 msgid "Show Contextual Menu"
 msgstr "Mostra menu contestuale"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:109
+#: data/com.github.phase1geo.annotator.shortcuts.ui:116
 msgid "Show Keyboard Shortcuts"
 msgstr "Mostra scorciatoie da tastiera"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:116
+#: data/com.github.phase1geo.annotator.shortcuts.ui:123
 msgid "Quit Application"
 msgstr "Esci dall'applicazione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:128
+#: data/com.github.phase1geo.annotator.shortcuts.ui:130
+msgid "Pan"
+msgstr ""
+
+#: data/com.github.phase1geo.annotator.shortcuts.ui:131
+msgid "[Middle-button + Drag]"
+msgstr ""
+
+#: data/com.github.phase1geo.annotator.shortcuts.ui:142
 msgid "Annotation Commands"
 msgstr "Comandi di annotazione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:143
+#: data/com.github.phase1geo.annotator.shortcuts.ui:157
 #, fuzzy
 msgid "Outlined Rectangle"
 msgstr "Nuovo rettangolo delineato"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:150
+#: data/com.github.phase1geo.annotator.shortcuts.ui:164
 #, fuzzy
 msgid "Solid Rectangle"
 msgstr "Nuovo rettangolo solido"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:157
+#: data/com.github.phase1geo.annotator.shortcuts.ui:171
 #, fuzzy
 msgid "Outlined Oval"
 msgstr "Nuovo ovale delineato"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:164
+#: data/com.github.phase1geo.annotator.shortcuts.ui:178
 #, fuzzy
 msgid "Solid Oval"
 msgstr "Nuovo Solido Ovale"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:171
+#: data/com.github.phase1geo.annotator.shortcuts.ui:185
 #, fuzzy
 msgid "Outlined Star"
 msgstr "Nuova stella delineata"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:178
+#: data/com.github.phase1geo.annotator.shortcuts.ui:192
 #, fuzzy
 msgid "Solid Star"
 msgstr "Nuova Stella Solida"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:185
+#: data/com.github.phase1geo.annotator.shortcuts.ui:199
 #, fuzzy
 msgid "Talking Bubble"
 msgstr "Nuvoletta di dialogo"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:192
+#: data/com.github.phase1geo.annotator.shortcuts.ui:206
 #, fuzzy
 msgid "Thought Bubble"
 msgstr "Nuvoletta di pensiero"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:206
+#: data/com.github.phase1geo.annotator.shortcuts.ui:220
 #, fuzzy
 msgid "Text Box"
 msgstr "Nuova casella di testo"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:215
+#: data/com.github.phase1geo.annotator.shortcuts.ui:229
 #, fuzzy
 msgid "Add Other"
 msgstr "Aggiungi Forma"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:219
+#: data/com.github.phase1geo.annotator.shortcuts.ui:233
 #, fuzzy
 msgid "Blur Box"
 msgstr "Nuovo riquadro sfocatura"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:233
+#: data/com.github.phase1geo.annotator.shortcuts.ui:247
 #, fuzzy
 msgid "Pencil Stroke"
 msgstr "Nuovo tratto di matita"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:240
+#: data/com.github.phase1geo.annotator.shortcuts.ui:254
 #, fuzzy
 msgid "Sequence Marker"
 msgstr "Nuovo marcatore di sequenza"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:249
+#: data/com.github.phase1geo.annotator.shortcuts.ui:263
 msgid "Current Item"
 msgstr "Elemento corrente"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:253
+#: data/com.github.phase1geo.annotator.shortcuts.ui:267
 msgid "Delete Selected Item"
 msgstr "Elimina elemento selezionato"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:260
+#: data/com.github.phase1geo.annotator.shortcuts.ui:274
 msgid "Copy Selected Item and Move"
 msgstr "Copia elemento selezionato e sposta"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:261
+#: data/com.github.phase1geo.annotator.shortcuts.ui:275
 msgid "[Control + Drag]"
 msgstr "[Ctrl + trascina]"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:272
+#: data/com.github.phase1geo.annotator.shortcuts.ui:286
 msgid "Text Commands"
 msgstr "Comandi di testo"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:276
+#: data/com.github.phase1geo.annotator.shortcuts.ui:290
 msgid "Editing"
 msgstr "Modifica"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:280
+#: data/com.github.phase1geo.annotator.shortcuts.ui:294
 msgid "Delete Previous Character"
 msgstr "Elimina carattere precedente"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:287
+#: data/com.github.phase1geo.annotator.shortcuts.ui:301
 msgid "Delete Next Character"
 msgstr "Elimina carattere successivo"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:294
+#: data/com.github.phase1geo.annotator.shortcuts.ui:308
 msgid "Exit Text Edit Mode And Select Item"
 msgstr "Esci dalla modalità di modifica del testo e seleziona l'elemento"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:301
+#: data/com.github.phase1geo.annotator.shortcuts.ui:315
 msgid "Insert Newline Character"
 msgstr "Inserisci nuovo carattere di riga"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:308
+#: data/com.github.phase1geo.annotator.shortcuts.ui:322
 msgid "Show Emoji Picker"
 msgstr "Mostra selettore emoji"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:321
+#: data/com.github.phase1geo.annotator.shortcuts.ui:335
 msgid "Move Cursor Left One Word"
 msgstr "Sposta il cursore a sinistra di una parola"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:328
+#: data/com.github.phase1geo.annotator.shortcuts.ui:342
 msgid "Move Cursor Right One Word"
 msgstr "Sposta il cursore a destra di una parola"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:335
+#: data/com.github.phase1geo.annotator.shortcuts.ui:349
 msgid "Move Cursor Left One Character"
 msgstr "Sposta il cursore a sinistra di un carattere"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:342
+#: data/com.github.phase1geo.annotator.shortcuts.ui:356
 msgid "Move Cursor Right One Character"
 msgstr "Sposta il cursore a destra di un carattere"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:349
+#: data/com.github.phase1geo.annotator.shortcuts.ui:363
 msgid "Move Cursor To Text Start"
 msgstr "Sposta il cursore all'inizio del testo"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:356
+#: data/com.github.phase1geo.annotator.shortcuts.ui:370
 msgid "Move Cursor To Text End"
 msgstr "Sposta il cursore alla fine del testo"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:363
+#: data/com.github.phase1geo.annotator.shortcuts.ui:377
 msgid "Move Cursor To Current Line Start"
 msgstr "Sposta il cursore all'inizio della riga corrente"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:370
+#: data/com.github.phase1geo.annotator.shortcuts.ui:384
 msgid "Move Cursor To Current Line End"
 msgstr "Sposta il cursore alla fine della riga corrente"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:377
+#: data/com.github.phase1geo.annotator.shortcuts.ui:391
 msgid "Move Cursor Up One Line"
 msgstr "Sposta il cursore in alto di una riga"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:384
+#: data/com.github.phase1geo.annotator.shortcuts.ui:398
 msgid "Move Cursor Down One Line"
 msgstr "Sposta il cursore in basso di una riga"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:393
+#: data/com.github.phase1geo.annotator.shortcuts.ui:407
 msgid "Selection"
 msgstr "Selezione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:397
+#: data/com.github.phase1geo.annotator.shortcuts.ui:411
 msgid "Select All Text"
 msgstr "Seleziona tutto il testo"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:404
+#: data/com.github.phase1geo.annotator.shortcuts.ui:418
 msgid "Deselect All Text"
 msgstr "Deseleziona tutto il testo"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:411
+#: data/com.github.phase1geo.annotator.shortcuts.ui:425
 msgid "Add Left Word To Selection"
 msgstr "Aggiungi parola a sinistra alla selezione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:418
+#: data/com.github.phase1geo.annotator.shortcuts.ui:432
 msgid "Add Right Word To Selection"
 msgstr "Aggiungi parola a destra alla selezione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:425
+#: data/com.github.phase1geo.annotator.shortcuts.ui:439
 msgid "Add Left Character To Selection"
 msgstr "Aggiungi il carattere a sinistra alla selezione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:432
+#: data/com.github.phase1geo.annotator.shortcuts.ui:446
 msgid "Add Right Character To Selection"
 msgstr "Aggiungi il carattere a destra alla selezione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:439
+#: data/com.github.phase1geo.annotator.shortcuts.ui:453
 msgid "Add Text From Start To Selection"
 msgstr "Aggiungi testo dall'inizio alla selezione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:446
+#: data/com.github.phase1geo.annotator.shortcuts.ui:460
 msgid "Add Text From End To Selection"
 msgstr "Aggiungi testo dalla fine alla selezione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:453
+#: data/com.github.phase1geo.annotator.shortcuts.ui:467
 msgid "Add Text From Current Line Start To Selection"
 msgstr "Aggiungi testo dall'inizio della riga corrente alla selezione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:460
+#: data/com.github.phase1geo.annotator.shortcuts.ui:474
 msgid "Add Text From Current Line End To Selection"
 msgstr "Aggiungi testo dalla fine della riga corrente alla selezione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:467
+#: data/com.github.phase1geo.annotator.shortcuts.ui:481
 msgid "Add Text Above Cursor To Selection"
 msgstr "Aggiungi testo sopra il cursore alla selezione"
 
-#: data/com.github.phase1geo.annotator.shortcuts.ui:474
+#: data/com.github.phase1geo.annotator.shortcuts.ui:488
 msgid "Add Text Below Cursor To Selection"
 msgstr "Aggiungi testo sotto il cursore alla selezione"
 
