@@ -719,8 +719,31 @@ public class MainWindow : Gtk.ApplicationWindow {
 
   }
 
+  private async void screenshot_wait_ms( uint ms ) {
+    GLib.Timeout.add( ms, () => {
+      screenshot_wait_ms.callback();
+      return Source.REMOVE;
+    });
+    yield;
+  }
+
   private async void do_screenshot_portal() {
     _welcome.sensitive = false;
+
+    // Hide the Annotator window so it isn't captured.  Honored by the
+    // non-portal path already; mirrored here so the toolbar's screenshot
+    // button (which always uses the portal) behaves the same way.  The
+    // window is shown again from handle_screenshot_callback once the
+    // portal response arrives.
+    var include = Annotator.settings.get_boolean( "screenshot-include-win" );
+    if( !include ) {
+      hide();
+      // Give the compositor time to actually unmap the window before
+      // the portal opens its interactive selector — without this, the
+      // Annotator window is still visible (and capturable) on Wayland.
+      yield screenshot_wait_ms( 200 );
+    }
+
     try {
 
       var bus = Bus.get_sync (BusType.SESSION);
@@ -765,6 +788,9 @@ public class MainWindow : Gtk.ApplicationWindow {
 
     } catch (Error e) {
       warning ("Screenshot failed: %s", e.message);
+      if( !include ) {
+        show();
+      }
     }
 
   }
