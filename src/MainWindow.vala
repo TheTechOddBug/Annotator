@@ -735,23 +735,16 @@ public class MainWindow : Gtk.ApplicationWindow {
                 null
       );
 
-      VariantDict options = new VariantDict( new Variant( "a{sv}" ) );
-      options.insert_value ("interactive", new Variant.boolean (true));
-
-      Variant dict_variant = options.end ();
-      Variant tuple_variant = new Variant ("(s@a{sv})", "interactive", dict_variant);
-
-      Variant result = yield proxy.call(
-        "Screenshot",
-        tuple_variant,
-        DBusCallFlags.NONE,
-        -1,
-        null
-      );
-
-      // Result is (o) → handle path
-      ObjectPath handle;
-      result.get ("(o)", out handle);
+      // Predict the Request handle so we can subscribe to its Response
+      // signal BEFORE issuing the Screenshot call.  Subscribing after
+      // the call returns races against the portal: when the helper is
+      // already running and responds quickly (typical for the second
+      // and subsequent screenshots in a session) the Response can fire
+      // before signal_subscribe is wired up, dropping the screenshot.
+      // The handle path format is defined by the XDG portal spec.
+      var token  = "annotator_%u".printf( Random.next_int() );
+      var sender = bus.get_unique_name().substring( 1 ).replace( ".", "_" );
+      var handle = "/org/freedesktop/portal/desktop/request/%s/%s".printf( sender, token );
 
       bus.signal_subscribe(
         "org.freedesktop.portal.Desktop",
@@ -761,6 +754,21 @@ public class MainWindow : Gtk.ApplicationWindow {
         null,
         DBusSignalFlags.NONE,
         handle_screenshot_callback
+      );
+
+      VariantDict options = new VariantDict( new Variant( "a{sv}" ) );
+      options.insert_value( "interactive",  new Variant.boolean( true ) );
+      options.insert_value( "handle_token", new Variant.string( token ) );
+
+      Variant dict_variant  = options.end ();
+      Variant tuple_variant = new Variant( "(s@a{sv})", "interactive", dict_variant );
+
+      yield proxy.call(
+        "Screenshot",
+        tuple_variant,
+        DBusCallFlags.NONE,
+        -1,
+        null
       );
 
     } catch (Error e) {
