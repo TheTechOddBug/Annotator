@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.phase1geo.annotator\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-15 21:45-0600\n"
+"POT-Creation-Date: 2026-04-23 21:17-0500\n"
 "PO-Revision-Date: 2026-02-23 21:30+0100\n"
 "Last-Translator: Albano Battistella <albano_battistella@gmail.com>\n"
 "Language-Team: Italian <LL@li.org>\n"
@@ -69,15 +69,15 @@ msgstr "Prendi e annota uno screenshot."
 msgid "Uses image data from standard input"
 msgstr "Utilizza i dati dell'immagine dall'input standard"
 
-#: src/CanvasImage.vala:131 src/CanvasImage.vala:156
+#: src/CanvasImage.vala:131 src/CanvasImage.vala:158
 msgid "change image"
 msgstr "cambia immagine"
 
-#: src/CanvasImage.vala:465
+#: src/CanvasImage.vala:467
 msgid "Color copied to clipboard"
 msgstr "Colore copiato negli appunti"
 
-#: src/CanvasImage.vala:520
+#: src/CanvasImage.vala:522
 msgid "image crop"
 msgstr "ritaglia immagine"
 
@@ -503,7 +503,7 @@ msgstr "Esporta Immagine"
 msgid "Zoom to Fit Window"
 msgstr "Zoom adatta finestra"
 
-#: src/MainWindow.vala:329 src/MainWindow.vala:931
+#: src/MainWindow.vala:329 src/MainWindow.vala:965
 #, c-format
 msgid "Zoom (%d%%)"
 msgstr "Zoom (%d%%)"
