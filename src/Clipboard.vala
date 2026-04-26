@@ -85,32 +85,36 @@ public class AnnotatorClipboard {
     var clipboard = Display.get_default().get_clipboard();
     var retval    = false;
 
-    try {
-      if( clipboard.get_formats().contain_mime_type( "image/png" ) ) {
-        clipboard.read_texture_async.begin( null, (ob, res) => {
+    if( clipboard.get_formats().contain_mime_type( "image/png" ) ) {
+      clipboard.read_texture_async.begin( null, (ob, res) => {
+        try {
           var texture = clipboard.read_texture_async.end( res );
           if( texture != null ) {
             var pixbuf = Utils.texture_to_pixbuf( texture );
             editor.paste_image( pixbuf, true );
           }
-        });
-        retval = true;
-      } else if( !image_only && clipboard.get_formats().contain_mime_type( "application/xml" ) ) {
-        clipboard.read_async.begin( {"application/xml"}, 0, null, (obj, res) => {
-          string str;
+        } catch( Error e ) {}
+      });
+      retval = true;
+    } else if( !image_only && clipboard.get_formats().contain_mime_type( "application/xml" ) ) {
+      clipboard.read_async.begin( {"application/xml"}, 0, null, (obj, res) => {
+        string str;
+        try {
           var stream   = clipboard.read_async.end( res, out str );
           var contents = Utils.read_stream( stream );
           editor.paste_items( contents );
-        });
-        retval = true;
-      } else if( !image_only && clipboard.get_formats().contain_gtype( Type.STRING ) ) {
-        clipboard.read_text_async.begin( null, (obj, res) => {
+        } catch( Error e ) {}
+      });
+      retval = true;
+    } else if( !image_only && clipboard.get_formats().contain_gtype( Type.STRING ) ) {
+      clipboard.read_text_async.begin( null, (obj, res) => {
+        try {
           var text = clipboard.read_text_async.end( res );
           editor.paste_text( text );
-        });
-        retval = true;
-      }
-    } catch( Error e ) {}
+        } catch( Error e ) {}
+      });
+      retval = true;
+    }
 
     return( retval );
 

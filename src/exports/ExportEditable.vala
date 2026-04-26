@@ -146,7 +146,7 @@ public class ExportEditable : Export {
     Xml.Doc*  doc  = new Xml.Doc( "1.0" );
     Xml.Node* root = new Xml.Node( null, "exports" );
 
-    root->set_prop( "version", Annotator.version );
+    root->set_prop( "version", canvas.win.application.version );
     root->add_child( canvas.save( image_dir, get_scale( "image-compression" ) ) );
 
     doc->set_root_element( root );
@@ -219,7 +219,6 @@ public class ExportEditable : Export {
       if( entry.pathname() == "annotations.xml" ) {
         entry.set_pathname( GLib.Path.build_filename( temp_dir, entry.pathname() ) );
       } else {
-        var image_name = GLib.Path.build_filename( temp_dir, "images", entry.pathname() );
         entry.set_pathname( GLib.Path.build_filename( image_dir, entry.pathname() ) );
       }
 
@@ -240,7 +239,6 @@ public class ExportEditable : Export {
 
     // Close the archive
     if( archive.close () != Archive.Result.OK) {
-      error( "Error: %s (%d)", archive.error_string(), archive.errno() );
       return( false );
     }
 

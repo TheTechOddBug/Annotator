@@ -419,6 +419,8 @@ public class Resizer : Dialog {
         _width.text  = (((double)orig_width  / width)  * 100).to_string();
         _height.text = (((double)orig_height / height) * 100).to_string();
         break;
+      default :
+        assert_not_reached();
     }
 
   }
@@ -501,7 +503,7 @@ public class Resizer : Dialog {
 
     var current  = get_image_info();
     var snapshot = new Gtk.Snapshot();
-    var rect     = Graphene.Rect.alloc();
+    var rect     = Graphene.Rect();
     rect.init( 0, 0, (float)200, (float)200 );
     var ctx      = snapshot.append_cairo( rect );
 

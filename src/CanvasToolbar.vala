@@ -486,7 +486,7 @@ public class CanvasToolbar : Box {
       popover      = new Popover(),
       child        = make_color_icon()
     };
-    mb.get_style_context().add_class( "color_chooser" );
+    mb.add_css_class( "color_chooser" );
 
     var box = new Box( Orientation.VERTICAL, 0 ) {
       margin_start  = 10,
@@ -708,7 +708,7 @@ public class CanvasToolbar : Box {
       has_frame    = false,
       popover      = new Popover()
     };
-    mb.get_style_context().add_class( "color_chooser" );
+    mb.add_css_class( "color_chooser" );
 
     _canvas.win.theme_changed.connect((dark_mode) => {
       mb.icon_name = dark_mode ? "font-annotator-dark-symbolic" : "font-annotator-symbolic";
@@ -805,7 +805,7 @@ public class CanvasToolbar : Box {
   private Image make_color_icon() {
 
     var snapshot = new Snapshot();
-    var rect     = Graphene.Rect.alloc();
+    var rect     = Graphene.Rect();
     rect.init( 0, 0, (float)30, (float)24 );
     var ctx      = snapshot.append_cairo( rect );
 
@@ -842,7 +842,7 @@ public class CanvasToolbar : Box {
     var height = stroke_width;
 
     var snapshot = new Snapshot();
-    var rect     = Graphene.Rect.alloc();
+    var rect     = Graphene.Rect();
     rect.init( 0, 0, (float)width, (float)height );
     var ctx      = snapshot.append_cairo( rect );
 
@@ -866,7 +866,7 @@ public class CanvasToolbar : Box {
     var height = 5;
 
     var snapshot = new Snapshot();
-    var rect     = Graphene.Rect.alloc();
+    var rect     = Graphene.Rect();
     rect.init( 0, 0, (float)width, (float)height );
     var ctx      = snapshot.append_cairo( rect );
 
@@ -892,7 +892,7 @@ public class CanvasToolbar : Box {
     var height  = _canvas.items.props.stroke_width.width();
 
     var snapshot = new Snapshot();
-    var rect     = Graphene.Rect.alloc();
+    var rect     = Graphene.Rect();
     rect.init( 0, 0, (float)50, (float)height );
     var ctx      = snapshot.append_cairo( rect );
 

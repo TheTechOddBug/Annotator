@@ -72,7 +72,7 @@ public class ColorPicker : Box {
       has_frame = false
     };
     _toggle.toggled.connect( handle_toggle );
-    _toggle.get_style_context().add_class( type.get_css_class() );
+    _toggle.add_css_class( type.get_css_class() );
     type.set_image( _toggle );
 
     _chooser = new ColorChooserWidget();

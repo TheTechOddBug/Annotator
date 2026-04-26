@@ -209,16 +209,21 @@ public class Utils {
     return( Regex.match_simple( url_re(), str ) );
   }
 
-  public static void set_chooser_folder( FileChooser chooser ) {
+  //-------------------------------------------------------------
+  // Sets the initial folder for the given FileDialog to the directory
+  // saved in last-directory in settings.
+  public static void set_chooser_folder( FileDialog dialog ) {
     var dir_path = Annotator.settings.get_string( "last-directory" );
     if( dir_path != "" ) {
       try {
         var dir = File.new_for_path( dir_path );
-        chooser.set_current_folder( dir );
+        dialog.initial_folder = dir;
       } catch( Error e ) {}
     }
   }
 
+  //-------------------------------------------------------------
+  // Remembers the last folder used to open/save a file.
   public static void store_chooser_folder( string file ) {
     var dir = GLib.Path.get_dirname( file );
     Annotator.settings.set_string( "last-directory", dir );

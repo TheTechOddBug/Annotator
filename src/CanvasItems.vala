@@ -387,28 +387,33 @@ public class CanvasItems {
     add_item( item, -1, true );
   }
 
+  //-------------------------------------------------------------
+  // Adds an image that the user can select from using a standard
+  // file open dialog.
   public void add_image() {
 
-    // Get the file to open from the user
-    var dialog = new FileChooserNative( _( "Open Insertion Image" ), _canvas.win, FileChooserAction.OPEN, _( "Open" ), _( "Cancel" ) );
-    Utils.set_chooser_folder( dialog );
-
     // Create file filters for each supported format
+    var filters = new GLib.ListStore( typeof( FileFilter ) );
     foreach( FileFilter filter in _canvas.win.image_filters ) {
-      dialog.add_filter( filter );
+      filters.append( filter );
     }
 
-    dialog.response.connect((id) => {
-      if( id == ResponseType.ACCEPT ) {
-        var filename = dialog.get_file().get_path();
-        var item = create_image( filename );
+    // Get the file to open from the user
+    var dialog = new FileDialog() {
+      title   = _( "Open Insertion Image" ),
+      filters = filters
+    };
+    Utils.set_chooser_folder( dialog );
+
+    dialog.open.begin( _canvas.win, null, (obj, res) => {
+      try {
+        var file     = dialog.open.end( res );
+        var filename = file.get_path();
+        var item     = create_image( filename );
         add_item( item, -1, true );
         Utils.store_chooser_folder( filename );
-      }
-      dialog.destroy();
+      } catch( Error e ) {}
     });
-
-    dialog.show();
 
   }
 
@@ -1217,7 +1222,7 @@ public class CanvasItems {
   // Saves the given item as a custom item
   private void do_save_custom( CanvasItem item ) {
     var save_item = new CustomItem.with_item( item.duplicate() );
-    custom_items.add( save_item );
+    custom_items.add( _canvas.win, save_item );
   }
 
   //-------------------------------------------------------------

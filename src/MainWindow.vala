@@ -25,7 +25,6 @@ using Gee;
 public class MainWindow : Gtk.ApplicationWindow {
 
   private Granite.Placeholder _welcome;
-  private FontButton          _font;
   private Button              _open_btn;
   private Button              _screenshot_btn;
   private Button              _undo_btn;
@@ -139,7 +138,7 @@ public class MainWindow : Gtk.ApplicationWindow {
 
   //-------------------------------------------------------------
   // Returns the name of the icon to use for a headerbar icon
-  private string get_icon_name( string icon_name ) {
+  private string get_header_icon_name( string icon_name ) {
     return( "%s%s".printf( icon_name, (on_elementary ? "" : "-symbolic") ) );
   }
 
@@ -195,13 +194,13 @@ public class MainWindow : Gtk.ApplicationWindow {
     };
     set_titlebar( header );
 
-    _open_btn = new Button.from_icon_name( get_icon_name( "document-open" ) ) {
+    _open_btn = new Button.from_icon_name( get_header_icon_name( "document-open" ) ) {
       tooltip_markup = Utils.tooltip_with_accel( _( "Open Image" ), "<Control>o" )
     };
     _open_btn.clicked.connect( do_open );
     header.pack_start( _open_btn );
 
-    _screenshot_btn = new Button.from_icon_name( get_icon_name( "insert-image" ) ) {
+    _screenshot_btn = new Button.from_icon_name( get_header_icon_name( "insert-image" ) ) {
       tooltip_markup = Utils.tooltip_with_accel( _( "Take Screenshot" ), "<Control>t" )
     };
     _screenshot_btn.clicked.connect(() => {
@@ -209,14 +208,14 @@ public class MainWindow : Gtk.ApplicationWindow {
     });
     header.pack_start( _screenshot_btn );
 
-    _undo_btn = new Button.from_icon_name( get_icon_name( "edit-undo" ) ) {
+    _undo_btn = new Button.from_icon_name( get_header_icon_name( "edit-undo" ) ) {
       tooltip_markup = Utils.tooltip_with_accel( _( "Undo" ), "<Control>z" ),
       sensitive = false
     };
     _undo_btn.clicked.connect( do_undo );
     header.pack_start( _undo_btn );
 
-    _redo_btn = new Button.from_icon_name( get_icon_name( "edit-redo" ) ) {
+    _redo_btn = new Button.from_icon_name( get_header_icon_name( "edit-redo" ) ) {
       tooltip_markup = Utils.tooltip_with_accel( _( "Redo" ), "<Control><Shift>z" ),
       sensitive = false
     };
@@ -248,7 +247,7 @@ public class MainWindow : Gtk.ApplicationWindow {
 
     var pref_btn = new MenuButton() {
       has_frame    = !on_elementary,
-      child        = new Image.from_icon_name( get_icon_name( "open-menu" ) ),
+      child        = new Image.from_icon_name( get_header_icon_name( "open-menu" ) ),
       tooltip_text = _( "Properties" ),
       menu_model   = menu
     };
@@ -302,7 +301,7 @@ public class MainWindow : Gtk.ApplicationWindow {
   // Creates the zoom menu.
   private MenuButton create_zoom() {
 
-    _zoom = new ZoomWidget( (int)(_editor.canvas.zoom_min * 100), (int)(_editor.canvas.zoom_max * 100), (int)(_editor.canvas.zoom_step * 100) ) {
+    _zoom = new ZoomWidget( (int)(Canvas.zoom_min * 100), (int)(Canvas.zoom_max * 100), (int)(Canvas.zoom_step * 100) ) {
       margin_start  = 10,
       margin_end    = 10,
       margin_top    = 10,
@@ -325,7 +324,7 @@ public class MainWindow : Gtk.ApplicationWindow {
 
     // Add the button
     var zoom_btn = new MenuButton() {
-      icon_name    = get_icon_name( "zoom-fit-best" ),
+      icon_name    = get_header_icon_name( "zoom-fit-best" ),
       tooltip_text = _( "Zoom (%d%%)" ).printf( 100 ),
       sensitive    = false,
       popover      = zoom_popover
@@ -407,46 +406,6 @@ public class MainWindow : Gtk.ApplicationWindow {
   }
 
   //-------------------------------------------------------------
-  // Create font selection box
-  private Box create_font_selection() {
-
-    var box = new Box( Orientation.HORIZONTAL, 10 );
-    var lbl = new Label( _( "Font:" ) ) {
-      halign = Align.START
-    };
-
-    _font = new FontButton() {
-      halign  = Align.END,
-      hexpand = true
-    };
-    _font.set_filter_func( (family, face) => {
-      var fd     = face.describe();
-      var weight = fd.get_weight();
-      var style  = fd.get_style();
-      return( (weight == Pango.Weight.NORMAL) && (style == Pango.Style.NORMAL) );
-    });
-    _font.font_set.connect(() => {
-      var name = _font.get_font_family().get_name();
-      var size = _font.get_font_size() / Pango.SCALE;
-      // TBD - _editor.change_name_font( name, size );
-      Annotator.settings.set_string( "default-font-family", name );
-      Annotator.settings.set_int( "default-font-size", size );
-    });
-
-    // Set the font button defaults
-    var fd = _font.get_font_desc();
-    fd.set_family( Annotator.settings.get_string( "default-font-family" ) );
-    fd.set_size( Annotator.settings.get_int( "default-font-size" ) * Pango.SCALE );
-    _font.set_font_desc( fd );
-
-    box.append( lbl );
-    box.append( _font );
-
-    return( box );
-
-  }
-
-  //-------------------------------------------------------------
   // Creates a list of image filters that can be used in the open
   // dialog
   private void gather_image_filters() {
@@ -488,27 +447,31 @@ public class MainWindow : Gtk.ApplicationWindow {
 
     _welcome.sensitive = false;
 
-    // Get the file to open from the user
-    var dialog = new FileChooserNative( _( "Open Image File" ), this, FileChooserAction.OPEN, _( "Open" ), _( "Cancel" ) );
-    Utils.set_chooser_folder( dialog );
-
     // Create file filters for each supported format
+    var filter_list = new GLib.ListStore( typeof( FileFilter ) );
     foreach( FileFilter filter in _image_filters ) {
-      dialog.add_filter( filter );
+      filter_list.append( filter );
     }
 
-    dialog.response.connect((id) => {
-      if( id == ResponseType.ACCEPT ) {
-        var filename = dialog.get_file().get_path();
+    // Get the file to open from the user
+    var dialog = new FileDialog() {
+      modal = true,
+      title = _( "Open Image File" ),
+      filters = filter_list
+    };
+
+    Utils.set_chooser_folder( dialog );
+
+    dialog.open.begin( this, null, (obj, res) => {
+      try {
+        var file = dialog.open.end( res );
+        var filename = file.get_path();
         open_file( filename );
         Utils.store_chooser_folder( filename );
-      } else {
+      } catch( Error e ) {
         _welcome.sensitive = true;
       }
-      dialog.destroy();
     });
-
-    dialog.show();
 
   }
 
@@ -594,7 +557,7 @@ public class MainWindow : Gtk.ApplicationWindow {
   // indicates that it can handle taking the screenshot, use the
   // backend to perform the screenshot; otherwise, use the portal.
   public void do_screenshot( Widget? parent ) {
-    do_screenshot_portal();
+    do_screenshot_portal.begin();
   }
 
   //-------------------------------------------------------------
