@@ -93,7 +93,7 @@ public class CustomItem {
   // Saves this item as XML format
   public Xml.Node* save() {
     Xml.Node* node = new Xml.Node( null, "custom-item" );
-    node->add_child( item.save( 0, null ) );
+    node->add_child( item.save( 0, "" ) );
     return( node );
   }
 

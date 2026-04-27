@@ -33,7 +33,6 @@ public class MainWindow : Gtk.ApplicationWindow {
   private MenuButton          _export_btn;
   private MenuButton          _zoom_btn;
   private ZoomWidget          _zoom;
-  private Box                 _box;
   private Editor              _editor;
   private Stack               _stack;
   private SList<FileFilter>   _image_filters;
@@ -42,7 +41,6 @@ public class MainWindow : Gtk.ApplicationWindow {
   private const GLib.ActionEntry[] action_entries = {
     { "action_open",              do_open },
     { "action_screenshot",           action_screenshot },
-    { "action_screenshot_nonportal", action_screenshot_nonportal, "i" },
     { "action_quit",              do_quit },
     { "action_undo",              do_undo },
     { "action_redo",              do_redo },
@@ -204,7 +202,7 @@ public class MainWindow : Gtk.ApplicationWindow {
       tooltip_markup = Utils.tooltip_with_accel( _( "Take Screenshot" ), "<Control>t" )
     };
     _screenshot_btn.clicked.connect(() => {
-      do_screenshot( _screenshot_btn );
+      do_screenshot();
     });
     header.pack_start( _screenshot_btn );
 
@@ -374,7 +372,7 @@ public class MainWindow : Gtk.ApplicationWindow {
 
     var screenshot = _welcome.append_button( new ThemedIcon( "insert-image" ), _( "Take A Screenshot" ), _( "Open an image from a screenshot" ) );
     screenshot.clicked.connect(() => {
-      do_screenshot( screenshot );
+      do_screenshot();
     });
 
     // Initialize the clipboard
@@ -553,133 +551,13 @@ public class MainWindow : Gtk.ApplicationWindow {
   }
 
   //-------------------------------------------------------------
-  // Main procedure that initiates a screenshot.  If the backend
-  // indicates that it can handle taking the screenshot, use the
-  // backend to perform the screenshot; otherwise, use the portal.
-  public void do_screenshot( Widget? parent ) {
+  // Main procedure that initiates a screenshot.
+  public void do_screenshot() {
     do_screenshot_portal.begin();
   }
 
-  //-------------------------------------------------------------
-  // Returns the capture mode as determined by the user
-  private void show_screenshot_popover( Widget parent ) {
-
-    var shot_menu = new GLib.Menu();
-
-    for( int i=0; i<CaptureType.NUM; i++ ) {
-      var mode = (CaptureType)i;
-      shot_menu.append( mode.label(), "win.action_screenshot_nonportal(%d)".printf( i ) );
-    }
-
-    var opt_menu = new GLib.Menu();
-
-    var delay_item = new GLib.MenuItem( null, null );
-    delay_item.set_attribute( "custom", "s", "delay" );
-    opt_menu.append_item( delay_item );
-
-    var delay = new Label( _( "Delay (in seconds)" ) + ":" ) {
-      halign  = Align.START,
-      hexpand = true
-    };
-    var delay_sb = new SpinButton.with_range( 0, 6, 1 ) {
-      halign = Align.END,
-      valign = Align.CENTER
-    };
-    delay_sb.value = Annotator.settings.get_int( "screenshot-delay" );
-    delay_sb.value_changed.connect(() => {
-      Annotator.settings.set_int( "screenshot-delay", (int)delay_sb.value );
-    });
-
-    var dbox = new Box( Orientation.HORIZONTAL, 10 ) {
-      margin_start = 10,
-      margin_end   = 10
-    };
-    dbox.append( delay );
-    dbox.append( delay_sb );
-
-    var include_item = new GLib.MenuItem( null, null );
-    include_item.set_attribute( "custom", "s", "include" );
-    opt_menu.append_item( include_item );
-
-    var include = new Label( _( "Include Annotator window" ) + ":" ) {
-      halign  = Align.START,
-      hexpand = true
-    };
-    var include_sw = new Switch() {
-      halign = Align.END,
-      valign = Align.CENTER,
-      active = Annotator.settings.get_boolean( "screenshot-include-win" )
-    };
-    include_sw.notify["active"].connect((value) => {
-      Annotator.settings.set_boolean( "screenshot-include-win", include_sw.active );
-    });
-
-    var ibox = new Box( Orientation.HORIZONTAL, 10 ) {
-      margin_top   = 10,
-      margin_start = 10,
-      margin_end   = 10
-    };
-    ibox.append( include );
-    ibox.append( include_sw );
-
-    var menu = new GLib.Menu();
-    menu.append_section( null, shot_menu );
-    menu.append_section( null, opt_menu );
-
-    var popover = new PopoverMenu.from_model( menu ) {
-      position = PositionType.BOTTOM
-    };
-    popover.set_parent( parent );
-    popover.add_child( dbox, "delay" );
-    popover.add_child( ibox, "include" );
-    popover.popup();
-
-  }
-
   private void action_screenshot() {
-    do_screenshot( _screenshot_btn );
-  }
-
-  private void action_screenshot_nonportal( SimpleAction action, Variant? variant ) {
-    if( variant != null ) {
-      var mode = (CaptureType)variant.get_int32();
-      do_screenshot_nonportal( mode );
-    }
-  }
-
-  public void do_screenshot_nonportal( CaptureType capture_mode ) {
-
-    // If we aren't capturing anything, end now
-    if( capture_mode == CaptureType.NONE ) return;
-
-    var backend = new ScreenshotBackend();
-    var delay   = Annotator.settings.get_int( "screenshot-delay" );
-    var include = Annotator.settings.get_boolean( "screenshot-include-win" );
-
-    // Hide the application
-    if( !include ) {
-      hide();
-    }
-
-    backend.capture.begin (capture_mode, delay, false, false /* redact */, (obj, res) => {
-      Gdk.Pixbuf? pixbuf = null;
-      try {
-        pixbuf = backend.capture.end (res);
-      } catch (GLib.IOError.CANCELLED e) {
-        // TBD
-      } catch (Error e) {
-        // TBD
-      }
-      if (pixbuf != null) {
-        _editor.paste_image( pixbuf, false );
-        _zoom_btn.set_sensitive( true );
-        _export_btn.set_sensitive( true );
-      }
-      if( !include ) {
-        show();
-      }
-    });
-
+    do_screenshot();
   }
 
   private async void screenshot_wait_ms( uint ms ) {

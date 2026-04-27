@@ -39,7 +39,7 @@ public class ExportEditable : Export {
     var fname = repair_filename( filename );
 
     // Figure out if the user wants to include the images or not
-    save( fname );
+    save_annotator( fname );
 
     return( true );
 
@@ -50,7 +50,7 @@ public class ExportEditable : Export {
   // images used within the annotation are saved into the directory
   // and the directory is zipped and archived as the final *.annotator
   // file.
-  private void save( string fname ) {
+  private void save_annotator( string fname ) {
 
     string temp_dir;
 
@@ -78,11 +78,13 @@ public class ExportEditable : Export {
     archive_file( archive, annotations_file );
 
     // Add the images
-    string? name = null;
-    var     dir  = Dir.open( image_dir );
-    while( (name = dir.read_name()) != null ) {
-      archive_file( archive, GLib.Path.build_filename( image_dir, name ) );
-    }
+    try {
+      string? name = null;
+      var     dir  = Dir.open( image_dir );
+      while( (name = dir.read_name()) != null ) {
+        archive_file( archive, GLib.Path.build_filename( image_dir, name ) );
+      }
+    } catch( FileError e ) {}
 
     // Close the archive
     if( archive.close() != Archive.Result.OK ) {

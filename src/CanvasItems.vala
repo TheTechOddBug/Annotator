@@ -1233,7 +1233,7 @@ public class CanvasItems {
     Xml.Node* root = new Xml.Node( null, "items" );
     doc->set_root_element( root );
     for( int i=0; i<items.length; i++ ) {
-      root->add_child( items.index( i ).save( i, null ) );
+      root->add_child( items.index( i ).save( i, "" ) );
     }
     doc->dump_memory( out serialized );
     delete doc;

@@ -77,7 +77,7 @@ public class Annotator : Gtk.Application {
         Process.exit( 1 );
       }
     } else if( take_screenshot ) {
-      appwin.do_screenshot( null );
+      appwin.do_screenshot();
     }
 
   }

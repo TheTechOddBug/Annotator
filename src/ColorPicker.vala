@@ -94,7 +94,7 @@ public class ColorPicker : Box {
     _select = new MenuButton() {
       has_frame = false
     };
-    _select.get_style_context().add_class( "color_chooser" );
+    _select.add_css_class( "color_chooser" );
 
     _select.popover = new Popover() {
       child = overlay
@@ -123,18 +123,14 @@ public class ColorPicker : Box {
 
   private void update_css( RGBA rgba ) {
     var provider = new CssProvider();
-    try {
-      var color    = Utils.color_to_string( rgba );
-      var css_data = ".%s { background: %s; }".printf( _type.get_css_class(), color );
-      provider.load_from_data( css_data.data );
-      StyleContext.add_provider_for_display(
-        Display.get_default(),
-        provider,
-        STYLE_PROVIDER_PRIORITY_APPLICATION
-      );
-    } catch( GLib.Error e ) {
-      stdout.printf( "Unable to update css: %s\n", e.message );
-    }
+    var color    = Utils.color_to_string( rgba );
+    var css_data = ".%s { background: %s; }".printf( _type.get_css_class(), color );
+    provider.load_from_string( css_data );
+    StyleContext.add_provider_for_display(
+      Display.get_default(),
+      provider,
+      STYLE_PROVIDER_PRIORITY_APPLICATION
+    );
   }
 
   private void handle_toggle() {

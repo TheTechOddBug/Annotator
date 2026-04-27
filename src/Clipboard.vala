@@ -42,9 +42,8 @@ public class AnnotatorClipboard {
 
   //-------------------------------------------------------------
   // Copies the selected image to the clipboard
-  public static void copy_image( Pixbuf img ) {
+  public static void copy_image( Texture texture ) {
     var clipboard = Display.get_default().get_clipboard();
-    var texture   = Texture.for_pixbuf( img );
     clipboard.set_texture( texture );
   }
 

@@ -215,10 +215,8 @@ public class Utils {
   public static void set_chooser_folder( FileDialog dialog ) {
     var dir_path = Annotator.settings.get_string( "last-directory" );
     if( dir_path != "" ) {
-      try {
-        var dir = File.new_for_path( dir_path );
-        dialog.initial_folder = dir;
-      } catch( Error e ) {}
+      var dir = File.new_for_path( dir_path );
+      dialog.initial_folder = dir;
     }
   }
 
@@ -269,6 +267,17 @@ public class Utils {
       return( null );
     }
 
+  }
+
+  //-------------------------------------------------------------
+  // Creates a texture from a surface.
+  public static Gdk.Texture surface_to_texture( ImageSurface surface ) {
+    int width   = surface.get_width ();
+    int height  = surface.get_height ();
+    int stride  = surface.get_stride ();
+    var bytes   = new GLib.Bytes (surface.get_data ());
+    var texture = new Gdk.MemoryTexture( width, height, Gdk.MemoryFormat.B8G8R8A8_PREMULTIPLIED, bytes, stride );
+    return( texture );
   }
 
   //-------------------------------------------------------------

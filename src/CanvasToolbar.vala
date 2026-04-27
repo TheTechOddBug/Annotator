@@ -30,12 +30,11 @@ public class CanvasToolbar : Box {
   private ToggleButton       _crop_btn;
   private Array<CheckButton> _width_btns;
   private Array<CheckButton> _dash_btns;
-  private ColorChooserWidget _color_chooser;
+  private ColorDialogButton  _color_chooser;
   private Switch             _asw;
   private Revealer           _areveal;
   private Scale              _ascale;
   private FontChooserWidget  _font_chooser;
-  private int                _current_shape;
   private HashMap<CanvasItemCategory,CurrentItem> _current_item;
 
   //-------------------------------------------------------------
@@ -258,7 +257,7 @@ public class CanvasToolbar : Box {
   // flow box
   private void create_sticker_image( FlowBox box, StickerInfo info, Popover popover ) {
 
-    var buf     = _canvas.win.sticker_set.make_pixbuf( info.resource );
+    var buf     = StickerSet.make_pixbuf( info.resource );
     var texture = Gdk.Texture.for_pixbuf( buf );
     var picture = new Picture.for_paintable( texture ) {
       can_shrink = false
@@ -480,35 +479,22 @@ public class CanvasToolbar : Box {
   // Creates the color dropdown
   private void create_color() {
 
-    var mb = new MenuButton() {
-      has_frame    = false,
+    var dialog = new ColorDialog() {
+      modal      = true,
+      title      = _( "Selection Shape Color" ),
+      with_alpha = true
+    };
+
+    _color_chooser = new ColorDialogButton( dialog ) {
       tooltip_text = _( "Shape Color" ),
-      popover      = new Popover(),
-      child        = make_color_icon()
-    };
-    mb.add_css_class( "color_chooser" );
-
-    var box = new Box( Orientation.VERTICAL, 0 ) {
-      margin_start  = 10,
-      margin_end    = 10,
-      margin_top    = 10,
-      margin_bottom = 10
+      rgba         = _canvas.items.props.color
     };
 
-    _color_chooser = new ColorChooserWidget() {
-      rgba = _canvas.items.props.color
-    };
-    _color_chooser.notify.connect((p) => {
-      _canvas.items.props.color = _color_chooser.rgba;
-      mb.child = make_color_icon();
+    _color_chooser.notify["rgba"].connect(() => {
+      _canvas.items.props.color = _color_chooser.get_rgba();
     });
-    box.append( _color_chooser );
 
-    create_color_alpha( mb, box );
-
-    mb.popover.child = box;
-
-    append( mb );
+    append( _color_chooser );
 
   }
 
@@ -789,12 +775,14 @@ public class CanvasToolbar : Box {
 
     drag.drag_end.connect((d, delete_data) => {
       if( !delete_data ) {
-        var val      = Value( typeof(GLib.File) );
-        var provider = d.get_content();
-        if( provider.get_value( ref val ) ) {
-          var file = (GLib.File)val;
-          FileUtils.remove( file.get_path() );
-        }
+        try {
+          var val      = Value( typeof(GLib.File) );
+          var provider = d.get_content();
+          if( provider.get_value( ref val ) ) {
+            var file = (GLib.File)val;
+            FileUtils.remove( file.get_path() );
+          }
+        } catch( Error e ) {}
       }
     });
 
