@@ -31,9 +31,6 @@ public class CanvasToolbar : Box {
   private Array<CheckButton> _width_btns;
   private Array<CheckButton> _dash_btns;
   private ColorDialogButton  _color_chooser;
-  private Switch             _asw;
-  private Revealer           _areveal;
-  private Scale              _ascale;
   private HashMap<CanvasItemCategory,CurrentItem> _current_item;
 
   //-------------------------------------------------------------
@@ -505,77 +502,6 @@ public class CanvasToolbar : Box {
 
   }
 
-  /*
-  private void create_color_alpha( MenuButton mb, Box box ) {
-
-    _ascale = new Scale.with_range( Orientation.HORIZONTAL, 0.0, 1.0, 0.1 ) {
-      margin_start = 20,
-      margin_end   = 20,
-      draw_value   = true
-    };
-    _ascale.set_value( _canvas.items.props.alpha );
-    _ascale.value_changed.connect(() => {
-      _canvas.items.props.alpha = _ascale.get_value();
-      mb.child = make_color_icon();
-    });
-    for( int i=0; i<=10; i++ ) {
-      _ascale.add_mark( (i / 10.0), PositionType.BOTTOM, null );
-    }
-
-    _areveal = new Revealer() {
-      reveal_child = (_canvas.items.props.alpha < 1.0),
-      child = _ascale
-    };
-
-    var btn_controller = new GestureClick();
-    _asw = new Switch() {
-      halign = Align.START,
-      active = (_canvas.items.props.alpha < 1.0)
-    };
-    _asw.add_controller( btn_controller );
-    btn_controller.released.connect((n_press, x, y) => {
-      _canvas.items.props.alpha = _areveal.reveal_child ? 1.0 : _ascale.get_value();
-      mb.child = make_color_icon();
-      _areveal.reveal_child = !_areveal.reveal_child;
-    });
-
-    var albl = new Label( Utils.make_title( _( "Add Transparency" ) ) ) {
-      halign     = Align.START,
-      use_markup = true,
-      margin_end = 10
-    };
-
-    var picker = new Button.from_icon_name( "eyedropper-symbolic" ) {
-      tooltip_text = _( "Pick Color From Image" ),
-      halign = Align.END,
-      hexpand = true
-    };
-    picker.clicked.connect(() => {
-      _canvas.image.pick_color( false );
-      mb.popover.popdown();
-    });
-
-    var albox = new Box( Orientation.HORIZONTAL, 10 ) {
-      halign = Align.FILL,
-      hexpand = true
-    };
-    albox.append( _asw );
-    albox.append( albl );
-    albox.append( picker );
-
-    var abox = new Box( Orientation.VERTICAL, 0 ) {
-      halign = Align.FILL,
-      hexpand = true,
-      margin_top = 20
-    };
-    abox.append( albox );
-    abox.append( _areveal );
-
-    box.append( abox );
-
-  }
-  */
-
   //-------------------------------------------------------------
   // Adds the stroke dropdown
   private void create_stroke() {
@@ -928,11 +854,6 @@ public class CanvasToolbar : Box {
 
     // Set the color
     _color_chooser.rgba = p.color;
-
-    // Handle the alpha value
-    _ascale.set_value( p.alpha );
-    _areveal.reveal_child = (p.alpha < 1.0);
-    _asw.set_active( p.alpha < 1.0 );
 
   }
 
