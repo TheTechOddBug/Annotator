@@ -561,9 +561,11 @@ public class CanvasItems {
 
   //-------------------------------------------------------------
   // Returns true if the alt key is enabled in the given state
+  /*
   private bool alt_state( ModifierType state ) {
     return( (bool)(state & ModifierType.ALT_MASK) );
   }
+  */
 
   //-------------------------------------------------------------
   // Returns the active text item, if it is set; otherwise,
@@ -658,6 +660,7 @@ public class CanvasItems {
     else if( !shift && Utils.has_key( kvs, Key.p ) ) { add_shape_item( CanvasItemType.PENCIL );       return( true ); }
     else if( !shift && Utils.has_key( kvs, Key.q ) ) { add_shape_item( CanvasItemType.SEQUENCE );     return( true ); }
     else if( !shift && Utils.has_key( kvs, Key.i ) ) { add_image();                                   return( true ); }
+    else if( !shift && Utils.has_key( kvs, Key.v ) ) { do_paste(); }
     else if( !shift && Utils.has_key( kvs, Key.Shift_L ) ) { return( handle_shift() ); }
     else if( !shift && Utils.has_key( kvs, Key.Control_L ) ) { return( handle_control() ); }
 
@@ -1157,7 +1160,7 @@ public class CanvasItems {
 
   //-------------------------------------------------------------
   // Pastes the given item from the clipboard (if one exists)
-  private void do_paste( CanvasItem item ) {
+  private void do_paste() {
     AnnotatorClipboard.paste( _canvas.editor );
   }
 
@@ -1258,6 +1261,8 @@ public class CanvasItems {
           case CanvasItemType.OVAL_FILL   :  item = create_oval( true );        break;
           case CanvasItemType.STAR_STROKE :  item = create_star( false );       break;
           case CanvasItemType.STAR_FILL   :  item = create_star( true );        break;
+          case CanvasItemType.TALK        :  item = create_bubble( CanvasBubbleType.TALK );  break;
+          case CanvasItemType.THINK       :  item = create_bubble( CanvasBubbleType.THINK );  break;
           case CanvasItemType.LINE        :  item = create_line();              break;
           case CanvasItemType.ARROW       :  item = create_arrow();             break;
           case CanvasItemType.TEXT        :  item = create_text();              break;
@@ -1267,6 +1272,7 @@ public class CanvasItems {
           case CanvasItemType.SEQUENCE    :  item = create_sequence();          break;
           case CanvasItemType.STICKER     :  item = create_sticker( null );     break;
           case CanvasItemType.IMAGE       :  item = create_image( null );       break;
+          default                         :  break;
         }
         if( item != null ) {
           item.load( it );
@@ -1356,6 +1362,7 @@ public class CanvasItems {
       case CanvasItemType.SEQUENCE    :  item = create_sequence( true );          break;
       case CanvasItemType.STICKER     :  item = create_sticker( null, true );     break;
       case CanvasItemType.IMAGE       :  item = create_image( null );             break;
+      default                         :  break;
     }
     if( item != null ) {
       item.load( node );

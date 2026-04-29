@@ -34,7 +34,6 @@ public class CanvasToolbar : Box {
   private Switch             _asw;
   private Revealer           _areveal;
   private Scale              _ascale;
-  private FontChooserWidget  _font_chooser;
   private HashMap<CanvasItemCategory,CurrentItem> _current_item;
 
   //-------------------------------------------------------------
@@ -506,6 +505,7 @@ public class CanvasToolbar : Box {
 
   }
 
+  /*
   private void create_color_alpha( MenuButton mb, Box box ) {
 
     _ascale = new Scale.with_range( Orientation.HORIZONTAL, 0.0, 1.0, 0.1 ) {
@@ -574,6 +574,7 @@ public class CanvasToolbar : Box {
     box.append( abox );
 
   }
+  */
 
   //-------------------------------------------------------------
   // Adds the stroke dropdown
@@ -688,40 +689,33 @@ public class CanvasToolbar : Box {
   // Adds the font menubutton
   private void create_fonts() {
 
-    var mb = new MenuButton() {
-      icon_name    = "font-annotator-symbolic",
-      tooltip_text = _( "Font Properties" ),
-      has_frame    = false,
-      popover      = new Popover()
-    };
-    mb.add_css_class( "color_chooser" );
-
-    _canvas.win.theme_changed.connect((dark_mode) => {
-      mb.icon_name = dark_mode ? "font-annotator-dark-symbolic" : "font-annotator-symbolic";
-    });
-
-    _font_chooser = new FontChooserWidget() {
+    var btn = new Button.from_icon_name( "font-annotator-symbolic" ) {
+      tooltip_text  = _( "Font Properties" ),
+      has_frame     = false,
       margin_start  = 10,
       margin_end    = 10,
       margin_top    = 10,
-      margin_bottom = 10,
-      font_desc     = _canvas.items.props.font
+      margin_bottom = 10
     };
-    _font_chooser.set_filter_func( (family, face) => {
-      var fd     = face.describe();
-      var weight = fd.get_weight();
-      var style  = fd.get_style();
-      return( (weight == Pango.Weight.NORMAL) && (style == Pango.Style.NORMAL) );
-    });
-    _font_chooser.notify.connect((p) => {
-      if( p.name == "font" ) {
-        _canvas.items.props.font = Pango.FontDescription.from_string( _font_chooser.get_font() );
-      }
+
+    _canvas.win.theme_changed.connect((dark_mode) => {
+      btn.icon_name = dark_mode ? "font-annotator-dark-symbolic" : "font-annotator-symbolic";
     });
 
-    mb.popover.child = _font_chooser;
+    var font_chooser = new FontDialog() {
+      title = _( "Change Font" )
+    };
 
-    append( mb );
+    btn.clicked.connect(() => {
+      font_chooser.choose_font.begin( _canvas.win, _canvas.items.props.font, null, (obj, res) => {
+        try {
+          var fd = font_chooser.choose_font.end( res );
+          _canvas.items.props.font = fd;
+        } catch( Error e ) {}
+      });
+    });
+
+    append( btn );
 
   }
 
@@ -790,6 +784,7 @@ public class CanvasToolbar : Box {
 
   }
 
+  /*
   private Image make_color_icon() {
 
     var snapshot = new Snapshot();
@@ -811,6 +806,7 @@ public class CanvasToolbar : Box {
     return( image );
 
   }
+  */
 
   //-------------------------------------------------------------
   // Returns true if the current mode is dark mode
@@ -937,9 +933,6 @@ public class CanvasToolbar : Box {
     _ascale.set_value( p.alpha );
     _areveal.reveal_child = (p.alpha < 1.0);
     _asw.set_active( p.alpha < 1.0 );
-
-    // Set the font
-    _font_chooser.font_desc = p.font;
 
   }
 

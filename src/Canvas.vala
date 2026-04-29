@@ -482,14 +482,14 @@ public class Canvas : DrawingArea {
                                 out double root_x, out double root_y ) {
     var ev = controller.get_current_event();
     var device = controller.get_current_event_device();
+    root_x = fallback_x;
+    root_y = fallback_y;
     if( (ev != null) && (device != null) ) {
       var surface = ev.get_surface();
       if( (surface != null) && surface.get_device_position( device, out root_x, out root_y, null ) ) {
         return;
       }
     }
-    root_x = fallback_x;
-    root_y = fallback_y;
   }
 
   //-------------------------------------------------------------

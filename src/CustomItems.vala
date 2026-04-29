@@ -167,11 +167,13 @@ public class CustomItems : Object {
 
   }
 
+  /*
   private void add_item_to_canvas( CanvasItems canvas_items, CustomItem item ) {
     var it = item.item.duplicate();
     it.bbox = canvas_items.center_box( it.bbox.width, it.bbox.height );
     canvas_items.add_item( it, -1, true );
   }
+  */
 
   //-------------------------------------------------------------
   // Returns the local filename containing the custom items

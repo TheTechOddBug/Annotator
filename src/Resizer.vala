@@ -231,6 +231,7 @@ public class Resizer : Dialog {
         width  = (int)((_info.pixbuf_rect.width  * width)  / 100.0);
         height = (int)((_info.pixbuf_rect.height * height) / 100.0);
         break;
+      default :  break;
     }
 
     var top    = _margins.index( 0 ).format.pixels( height, _margins.index( 0 ).value );
