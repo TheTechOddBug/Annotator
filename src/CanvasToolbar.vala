@@ -30,12 +30,7 @@ public class CanvasToolbar : Box {
   private ToggleButton       _crop_btn;
   private Array<CheckButton> _width_btns;
   private Array<CheckButton> _dash_btns;
-  private ColorChooserWidget _color_chooser;
-  private Switch             _asw;
-  private Revealer           _areveal;
-  private Scale              _ascale;
-  private FontChooserWidget  _font_chooser;
-  private int                _current_shape;
+  private ColorDialogButton  _color_chooser;
   private HashMap<CanvasItemCategory,CurrentItem> _current_item;
 
   //-------------------------------------------------------------
@@ -258,7 +253,7 @@ public class CanvasToolbar : Box {
   // flow box
   private void create_sticker_image( FlowBox box, StickerInfo info, Popover popover ) {
 
-    var buf     = _canvas.win.sticker_set.make_pixbuf( info.resource );
+    var buf     = StickerSet.make_pixbuf( info.resource );
     var texture = Gdk.Texture.for_pixbuf( buf );
     var picture = new Picture.for_paintable( texture ) {
       can_shrink = false
@@ -480,35 +475,22 @@ public class CanvasToolbar : Box {
   // Creates the color dropdown
   private void create_color() {
 
-    var mb = new MenuButton() {
-      has_frame    = false,
+    var dialog = new ColorDialog() {
+      modal      = true,
+      title      = _( "Selection Shape Color" ),
+      with_alpha = true
+    };
+
+    _color_chooser = new ColorDialogButton( dialog ) {
       tooltip_text = _( "Shape Color" ),
-      popover      = new Popover(),
-      child        = make_color_icon()
-    };
-    mb.get_style_context().add_class( "color_chooser" );
-
-    var box = new Box( Orientation.VERTICAL, 0 ) {
-      margin_start  = 10,
-      margin_end    = 10,
-      margin_top    = 10,
-      margin_bottom = 10
+      rgba         = _canvas.items.props.color
     };
 
-    _color_chooser = new ColorChooserWidget() {
-      rgba = _canvas.items.props.color
-    };
-    _color_chooser.notify.connect((p) => {
-      _canvas.items.props.color = _color_chooser.rgba;
-      mb.child = make_color_icon();
+    _color_chooser.notify["rgba"].connect(() => {
+      _canvas.items.props.color = _color_chooser.get_rgba();
     });
-    box.append( _color_chooser );
 
-    create_color_alpha( mb, box );
-
-    mb.popover.child = box;
-
-    append( mb );
+    append( _color_chooser );
 
   }
 
@@ -517,75 +499,6 @@ public class CanvasToolbar : Box {
   public void set_color( Gdk.RGBA color ) {
 
     _color_chooser.rgba = color;
-
-  }
-
-  private void create_color_alpha( MenuButton mb, Box box ) {
-
-    _ascale = new Scale.with_range( Orientation.HORIZONTAL, 0.0, 1.0, 0.1 ) {
-      margin_start = 20,
-      margin_end   = 20,
-      draw_value   = true
-    };
-    _ascale.set_value( _canvas.items.props.alpha );
-    _ascale.value_changed.connect(() => {
-      _canvas.items.props.alpha = _ascale.get_value();
-      mb.child = make_color_icon();
-    });
-    for( int i=0; i<=10; i++ ) {
-      _ascale.add_mark( (i / 10.0), PositionType.BOTTOM, null );
-    }
-
-    _areveal = new Revealer() {
-      reveal_child = (_canvas.items.props.alpha < 1.0),
-      child = _ascale
-    };
-
-    var btn_controller = new GestureClick();
-    _asw = new Switch() {
-      halign = Align.START,
-      active = (_canvas.items.props.alpha < 1.0)
-    };
-    _asw.add_controller( btn_controller );
-    btn_controller.released.connect((n_press, x, y) => {
-      _canvas.items.props.alpha = _areveal.reveal_child ? 1.0 : _ascale.get_value();
-      mb.child = make_color_icon();
-      _areveal.reveal_child = !_areveal.reveal_child;
-    });
-
-    var albl = new Label( Utils.make_title( _( "Add Transparency" ) ) ) {
-      halign     = Align.START,
-      use_markup = true,
-      margin_end = 10
-    };
-
-    var picker = new Button.from_icon_name( "eyedropper-symbolic" ) {
-      tooltip_text = _( "Pick Color From Image" ),
-      halign = Align.END,
-      hexpand = true
-    };
-    picker.clicked.connect(() => {
-      _canvas.image.pick_color( false );
-      mb.popover.popdown();
-    });
-
-    var albox = new Box( Orientation.HORIZONTAL, 10 ) {
-      halign = Align.FILL,
-      hexpand = true
-    };
-    albox.append( _asw );
-    albox.append( albl );
-    albox.append( picker );
-
-    var abox = new Box( Orientation.VERTICAL, 0 ) {
-      halign = Align.FILL,
-      hexpand = true,
-      margin_top = 20
-    };
-    abox.append( albox );
-    abox.append( _areveal );
-
-    box.append( abox );
 
   }
 
@@ -702,40 +615,33 @@ public class CanvasToolbar : Box {
   // Adds the font menubutton
   private void create_fonts() {
 
-    var mb = new MenuButton() {
-      icon_name    = "font-annotator-symbolic",
-      tooltip_text = _( "Font Properties" ),
-      has_frame    = false,
-      popover      = new Popover()
-    };
-    mb.get_style_context().add_class( "color_chooser" );
-
-    _canvas.win.theme_changed.connect((dark_mode) => {
-      mb.icon_name = dark_mode ? "font-annotator-dark-symbolic" : "font-annotator-symbolic";
-    });
-
-    _font_chooser = new FontChooserWidget() {
+    var btn = new Button.from_icon_name( "font-annotator-symbolic" ) {
+      tooltip_text  = _( "Font Properties" ),
+      has_frame     = false,
       margin_start  = 10,
       margin_end    = 10,
       margin_top    = 10,
-      margin_bottom = 10,
-      font_desc     = _canvas.items.props.font
+      margin_bottom = 10
     };
-    _font_chooser.set_filter_func( (family, face) => {
-      var fd     = face.describe();
-      var weight = fd.get_weight();
-      var style  = fd.get_style();
-      return( (weight == Pango.Weight.NORMAL) && (style == Pango.Style.NORMAL) );
-    });
-    _font_chooser.notify.connect((p) => {
-      if( p.name == "font" ) {
-        _canvas.items.props.font = Pango.FontDescription.from_string( _font_chooser.get_font() );
-      }
+
+    _canvas.win.theme_changed.connect((dark_mode) => {
+      btn.icon_name = dark_mode ? "font-annotator-dark-symbolic" : "font-annotator-symbolic";
     });
 
-    mb.popover.child = _font_chooser;
+    var font_chooser = new FontDialog() {
+      title = _( "Change Font" )
+    };
 
-    append( mb );
+    btn.clicked.connect(() => {
+      font_chooser.choose_font.begin( _canvas.win, _canvas.items.props.font, null, (obj, res) => {
+        try {
+          var fd = font_chooser.choose_font.end( res );
+          _canvas.items.props.font = fd;
+        } catch( Error e ) {}
+      });
+    });
+
+    append( btn );
 
   }
 
@@ -789,12 +695,14 @@ public class CanvasToolbar : Box {
 
     drag.drag_end.connect((d, delete_data) => {
       if( !delete_data ) {
-        var val      = Value( typeof(GLib.File) );
-        var provider = d.get_content();
-        if( provider.get_value( ref val ) ) {
-          var file = (GLib.File)val;
-          FileUtils.remove( file.get_path() );
-        }
+        try {
+          var val      = Value( typeof(GLib.File) );
+          var provider = d.get_content();
+          if( provider.get_value( ref val ) ) {
+            var file = (GLib.File)val;
+            FileUtils.remove( file.get_path() );
+          }
+        } catch( Error e ) {}
       }
     });
 
@@ -802,10 +710,11 @@ public class CanvasToolbar : Box {
 
   }
 
+  /*
   private Image make_color_icon() {
 
     var snapshot = new Snapshot();
-    var rect     = Graphene.Rect.alloc();
+    var rect     = Graphene.Rect();
     rect.init( 0, 0, (float)30, (float)24 );
     var ctx      = snapshot.append_cairo( rect );
 
@@ -823,6 +732,7 @@ public class CanvasToolbar : Box {
     return( image );
 
   }
+  */
 
   //-------------------------------------------------------------
   // Returns true if the current mode is dark mode
@@ -842,7 +752,7 @@ public class CanvasToolbar : Box {
     var height = stroke_width;
 
     var snapshot = new Snapshot();
-    var rect     = Graphene.Rect.alloc();
+    var rect     = Graphene.Rect();
     rect.init( 0, 0, (float)width, (float)height );
     var ctx      = snapshot.append_cairo( rect );
 
@@ -866,7 +776,7 @@ public class CanvasToolbar : Box {
     var height = 5;
 
     var snapshot = new Snapshot();
-    var rect     = Graphene.Rect.alloc();
+    var rect     = Graphene.Rect();
     rect.init( 0, 0, (float)width, (float)height );
     var ctx      = snapshot.append_cairo( rect );
 
@@ -892,7 +802,7 @@ public class CanvasToolbar : Box {
     var height  = _canvas.items.props.stroke_width.width();
 
     var snapshot = new Snapshot();
-    var rect     = Graphene.Rect.alloc();
+    var rect     = Graphene.Rect();
     rect.init( 0, 0, (float)50, (float)height );
     var ctx      = snapshot.append_cairo( rect );
 
@@ -944,14 +854,6 @@ public class CanvasToolbar : Box {
 
     // Set the color
     _color_chooser.rgba = p.color;
-
-    // Handle the alpha value
-    _ascale.set_value( p.alpha );
-    _areveal.reveal_child = (p.alpha < 1.0);
-    _asw.set_active( p.alpha < 1.0 );
-
-    // Set the font
-    _font_chooser.font_desc = p.font;
 
   }
 

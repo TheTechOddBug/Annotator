@@ -32,11 +32,14 @@ public class Annotator : Gtk.Application {
   public  static bool          use_clipboard     = false;
   public  static bool          take_screenshot   = false;
   public  static bool          std_input         = false;
-  public  static string        version           = "2.0.3";
 
   public Annotator () {
 
-    Object( application_id: "io.github.phase1geo.annotator", flags: ApplicationFlags.HANDLES_OPEN );
+    Object(
+      application_id: "com.github.phase1geo.annotator",
+      flags: ApplicationFlags.HANDLES_OPEN,
+      version: "2.0.3"
+    );
 
     Intl.setlocale( LocaleCategory.ALL, "" );
     Intl.bindtextdomain( GETTEXT_PACKAGE, LOCALEDIR );
@@ -77,7 +80,7 @@ public class Annotator : Gtk.Application {
         Process.exit( 1 );
       }
     } else if( take_screenshot ) {
-      appwin.do_screenshot( null );
+      appwin.do_screenshot();
     }
 
   }
