@@ -25,6 +25,7 @@ using Cairo;
 using Pango;
 
 public enum CanvasItemStrokeWidth {
+  WIDTH0,
   WIDTH1,
   WIDTH2,
   WIDTH3,
@@ -33,6 +34,7 @@ public enum CanvasItemStrokeWidth {
 
   public int width() {
     switch( this ) {
+      case WIDTH0 :  return( 2 );
       case WIDTH1 :  return( 6 );
       case WIDTH2 :  return( 10 );
       case WIDTH3 :  return( 14 );
@@ -43,6 +45,7 @@ public enum CanvasItemStrokeWidth {
 
   public string to_string() {
     switch( this ) {
+      case WIDTH0 :  return( "width0" );
       case WIDTH1 :  return( "width1" );
       case WIDTH2 :  return( "width2" );
       case WIDTH3 :  return( "width3" );
@@ -53,6 +56,7 @@ public enum CanvasItemStrokeWidth {
 
   public static CanvasItemStrokeWidth parse( string value ) {
     switch( value ) {
+      case "width0" :  return( WIDTH0 );
       case "width1" :  return( WIDTH1 );
       case "width2" :  return( WIDTH2 );
       case "width3" :  return( WIDTH3 );
