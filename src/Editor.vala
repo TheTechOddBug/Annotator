@@ -70,14 +70,26 @@ public class Editor : Box {
       halign = Align.CENTER,
       hexpand = true
     };
+
+    var crop_status = new Label( "" ) {
+      halign = Align.END,
+      visible = false,
+      margin_end = 10
+    };
+
     canvas.image.crop_started.connect(() => {
+      crop_status.visible = true;
       _sw.vscrollbar_policy = PolicyType.EXTERNAL;
       _sw.hscrollbar_policy = PolicyType.EXTERNAL;
     });
     canvas.image.crop_ended.connect(() => {
+      crop_status.visible = false;
       toolbar.crop_ended();
       _sw.vscrollbar_policy = PolicyType.AUTOMATIC;
       _sw.hscrollbar_policy = PolicyType.AUTOMATIC;
+    });
+    canvas.image.crop_changed.connect((rect) => {
+      crop_status.label = "%d x %d px".printf( (int)rect.width, (int)rect.height );
     });
     canvas.image.color_picked.connect((color) => {
       toolbar.set_color( color );
@@ -88,7 +100,7 @@ public class Editor : Box {
       hexpand = true
     };
 
-    var box = new Box( Orientation.HORIZONTAL, 0 ) {
+    var box = new Box( Orientation.HORIZONTAL, 5 ) {
       halign        = Align.FILL,
       hexpand       = true,
       margin_start  = 10,
@@ -97,6 +109,7 @@ public class Editor : Box {
       margin_bottom = 10
     };
     box.append( toolbar );
+    box.append( crop_status );
 
     // Pack the box
     append( box );

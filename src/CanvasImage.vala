@@ -85,6 +85,7 @@ public class CanvasImage {
 
   public signal void crop_started();
   public signal void crop_ended();
+  public signal void crop_changed( CanvasRect rect );
   public signal void image_changed();
   public signal void color_picked( RGBA color );
 
@@ -401,6 +402,7 @@ public class CanvasImage {
           ((box.x + box.width)  <= (info.width  / width_scale)) &&
           ((box.y + box.height) <= (info.height / height_scale)) ) {
         crop_rect.copy( box );
+        crop_changed( crop_rect );
         return( true );
       }
 
@@ -434,6 +436,7 @@ public class CanvasImage {
           ((box.x + box.width)  <= (info.width  / width_scale)) &&
           ((box.y + box.height) <= (info.height / height_scale)) ) {
         crop_rect.copy( box );
+        crop_changed( crop_rect );
         return( true );
       }
 
@@ -500,6 +503,7 @@ public class CanvasImage {
   public void start_crop() {
     cropping = true;
     crop_rect.copy_coords( 0, 0, info.width, info.height );
+    crop_changed( crop_rect );
     crop_started();
   }
 
