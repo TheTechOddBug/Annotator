@@ -46,6 +46,8 @@ public class Annotator : Gtk.Application {
     Intl.bind_textdomain_codeset( GETTEXT_PACKAGE, "UTF-8" );
     Intl.textdomain( GETTEXT_PACKAGE );
 
+    Environment.set_application_name( _( "Annotator" ) );
+
     startup.connect( start_application );
     open.connect( open_files );
 
