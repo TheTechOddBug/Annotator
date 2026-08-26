@@ -272,12 +272,19 @@ public class Utils {
   //-------------------------------------------------------------
   // Creates a texture from a surface.
   public static Gdk.Texture surface_to_texture( ImageSurface surface ) {
+
     int width   = surface.get_width ();
     int height  = surface.get_height ();
     int stride  = surface.get_stride ();
-    var bytes   = new GLib.Bytes (surface.get_data ());
+
+    unowned uint8[] data = surface.get_data ();
+    data.length = height * stride;
+
+    var bytes   = new GLib.Bytes( data );
     var texture = new Gdk.MemoryTexture( width, height, Gdk.MemoryFormat.B8G8R8A8_PREMULTIPLIED, bytes, stride );
+
     return( texture );
+
   }
 
   //-------------------------------------------------------------
